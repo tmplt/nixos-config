@@ -96,7 +96,7 @@
   services.dictd.enable = true;
   services.acpid.enable = true;
   services.thermald.enable = true;
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.enable = false;
 
   programs.gnupg.agent = {
     enable = true;

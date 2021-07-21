@@ -66,13 +66,16 @@
   programs.light.enable = true;
 
   services.xserver = {
-    enable = true;
+    enable = false; # but still here so we can copy the XKB config to TTYs
     xkbVariant = "colemak";
     xkbOptions = "ctrl:nocaps,compose:menu,compose:rwin";
     autoRepeatDelay = 300;
     autoRepeatInterval = 35;
   };
   console.useXkbConfig = true;
+
+  programs.sway.enable = true;
+  hardware.opengl.enable = true;
 
   # Convenience symlinks for emacs, offlineimap
   environment.etc = {
@@ -94,6 +97,11 @@
   services.acpid.enable = true;
   services.thermald.enable = true;
   virtualisation.libvirtd.enable = true;
+
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # Misc. options
 

@@ -1,5 +1,5 @@
 let secrets = import ../secrets; in
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
   home.sessionPath = [ "/home/tmplt/.cargo/bin" ];
 
   accounts.email.maildirBasePath = "mail";
@@ -139,6 +139,12 @@ let secrets = import ../secrets; in
   };
 
   home.packages = with pkgs; [
+    # for wayland
+    swaylock
+    swayidle
+    wl-clipboard
+    alacritty
+    dmenu
   ];
 
   programs.direnv = {
@@ -264,16 +270,6 @@ let secrets = import ../secrets; in
     variant = "colemak,";
   };
 
-  services.gpg-agent = {
-    enable = true;
-
-    defaultCacheTtl = 1800; # 30 min
-    defaultCacheTtlSsh = 1800;
-    enableSshSupport = true;
-    grabKeyboardAndMouse = true;
-    enableScDaemon = false;
-  };
-
   services.syncthing = {
     enable = true;
     tray = false;
@@ -281,24 +277,42 @@ let secrets = import ../secrets; in
 
   # Graphical services
 
-  xsession = {
+  wayland.windowManager.sway = {
     enable = true;
-    windowManager.command = "${pkgs.lispPackages.stumpwm}/bin/stumpwm";
+    systemdIntegration = true;
+    wrapperFeatures = {
+      gtk = true;
+    };
+
+    config = {
+      modifier = "Mod4";
+      terminal = "${pkgs.foot}/bin/foot";
+    };
+
+    extraConfig = ''
+      input * {
+        xkb_layout us
+        xkb_variant colemak
+        xkb_options ctrl:nocaps,compose:menu,compose:rwin
+        repeat_delay 300
+        repeat_rate 35
+      }
+
+      seat * hide_cursor 8000
+
+      bindsym Mod4+Control+e exec emacsclient --create-frame --alternate-editor="";
+      bindsym Mod4+x exec dmenu_run
+    '';
   };
 
   services.screen-locker = {
     enable = true;
     inactiveInterval = 10; # lock after 10min of inactivity
-    lockCmd = "${pkgs.i3lock}/bin/i3lock -n -i ~/wallpapers/shoebill.png";
-  };
-
-  services.picom = {
-    enable = true;
-    vSync = true;
+    lockCmd = "${pkgs.swaylock}/bin/swaylock -ni /home/tmplt/wallpapers/shoebill.png";
   };
 
   services.random-background = {
-    enable = true;
+    enable = false;
     enableXinerama = true;
     imageDirectory = "%h/wallpapers";
   };
@@ -309,6 +323,4 @@ let secrets = import ../secrets; in
     enable = true;
     provider = "geoclue2";
   };
-
-  services.unclutter.enable = true;
 }

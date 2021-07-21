@@ -3,9 +3,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05-small";
     home-manager.url = "github:nix-community/home-manager/release-21.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    emacs.url = "github:nix-community/emacs-overlay/master";
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, ... }: {
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, emacs, ... }: {
 
     nixosConfigurations = {
       perscitia = nixpkgs.lib.nixosSystem {
@@ -14,6 +15,10 @@
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
 
           ./systems/laptop.nix
+          ({ pkgs, ... }: {
+            nixpkgs.overlays = [ emacs.overlay ];
+            imports = [ ./modules/emacs ];
+          })
 
           home-manager.nixosModules.home-manager
           {

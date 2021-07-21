@@ -138,15 +138,7 @@ let secrets = import ../secrets; in
     package = pkgs.gitAndTools.gitFull;
   };
 
-  programs.emacs = {
-    enable = true;
-    extraPackages = epkgs: [ epkgs.pdf-tools epkgs.org-pdftools ]; # non-trivial
-  };
-
   home.packages = with pkgs; [
-    imagemagick # needed by epkgs.pdf-tools
-    msmtp # needed by mu4e
-    pandoc ripgrep fd # neede by epkgs.rustic
   ];
 
   programs.direnv = {

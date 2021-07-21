@@ -4,17 +4,9 @@
                '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list
    'load-path "/etc/nix/pins/mu/share/emacs/site-lisp")
-  (package-initialize)
-  (setq use-package-always-ensure t))
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package)
-  (require 'use-package-ensure))
+  (package-initialize))
 
 ;;;; Vanilla Emacs options
-
-(server-start)
 
 ;; By default, use spaces for indentation
 (setq-default indent-tabs-mode nil)
@@ -106,7 +98,18 @@
 
 (global-set-key (kbd "<s-C-return>") 'eshell-other-window)
 
-(setq gc-cons-threshold 20000000)       ; GC after 20M
+;; Minimize garbage collection during startup
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Lower threshold back to 8 MiB (default is 800kB)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 25 1024 1024))))
+
+(add-hook 'focuso-out-hook #'garbage-collect)
+(use-package gcmh
+  :init
+  (gcmh-mode 1))
 
 ;; Display line numbers
 ;; TODO: make this into a dolist
@@ -142,10 +145,6 @@
 (setq c-default-style "linux")
 
 ;; load a decent colour theme; press F12 to switch between light/dark
-(unless (package-installed-p 'modus-vivendi-theme)
-  (package-install 'modus-vivendi-theme))
-(unless (package-installed-p 'modus-operandi-theme)
-  (package-install 'modus-operandi-theme))
 (load-theme 'modus-operandi t)
 (defun themes-toggle ()
   (interactive)
@@ -156,9 +155,6 @@
     (disable-theme 'modus-vivendi)
     (load-theme 'modus-operandi t)))
 (global-set-key [f12] 'themes-toggle)
-
-;; Load a decent font
-(add-to-list 'default-frame-alist '(font . "Go Mono"))
 
 ;; Delete any trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -261,23 +257,16 @@
   :bind (:map org-agenda-mode-map
               ("x" . (lambda nil (interactive) (org-agenda-todo "CANCELLED")))))
 
-(use-package org-crypt                  ; TODO set this up properly with a GPG key
-  :ensure nil
-  :config
-  ;; (org-crypt-use-before-save-magic)
-  (setq org-tags-exclude-from-inheritance '("crypt") ; TODO encrypt :secret: entries
-        org-crypt-key nil))             ; use symmetric encryption
-
-(use-package org-roam
-  :diminish org-roam-mode
-  :hook
-  (after-init . org-roam-mode)
-  :config
-  (setq org-roam-directory "~/org/roam")
-  :bind (("C-c n l" . org-roam)
-         ("C-c n i" . org-roam-insert)
-         ("C-c n f" . org-roam-find-file)
-         ("C-c n j" . org-roam-jump-to-index)))
+;; (use-package org-roam
+;;   :diminish org-roam-mode
+;;   :hook
+;;   (after-init . org-roam-mode)
+;;   :config
+;;   (setq org-roam-directory "~/org/roam")
+;;   :bind (("C-c n l" . org-roam)
+;;          ("C-c n i" . org-roam-insert)
+;;          ("C-c n f" . org-roam-find-file)
+;;          ("C-c n j" . org-roam-jump-to-index)))
 
 (use-package org-ref
   :config
@@ -306,7 +295,7 @@
   :config
   (setq send-mail-function 'smtpmail-send-it
         message-send-mail-function 'message-send-mail-with-sendmail
-        sendmail-program "/run/current-system/sw/bin/msmtp"
+        sendmail-program "msmtp"
         message-sendmail-extra-arguments '("--read-envelope-from"))
   ;; Required accoring to emacswiki when msmtp(1) is used
   (setq message-sendmail-f-is-evil 't)
@@ -484,16 +473,11 @@ there are no attachments."
                         (mapc #'elfeed-search-update-entry entries)
                         (unless (use-region-p) (forward-line)))))))
 
-(use-package rust-mode
-  :bind
-  ("C-c C-c" . (lambda ()
-                 (interactive)
-                 (save-buffer)
-                 (rust-compile)))
-  ("C-c C-r" . (lambda ()
-                 (interactive)
-                 (save-buffer)
-                 (rust-run))))
+(use-package rustic
+  :config
+  (setq rustic-lsp-client nil)
+  :init
+  (hs-minor-mode 1))
 (use-package nix-mode)
 (use-package haskell-mode)
 (use-package yaml-mode)
@@ -663,11 +647,12 @@ there are no attachments."
  '(org-agenda-files
    '("~/exjobb/thesis/thesis.org" "~/org/work.org" "~/org/school.org" "~/org/home.org" "~/org/tasks.org" "~/exjobb/thesis/scratch.org"))
  '(package-selected-packages
-   '(sticky markdown-mode frame-purpose rainbow-identifiers ht esxml tracking ov a request dash-functional anaphora matrix-client quelpa-use-package quelpa openwith saveplace-pdf-view ace-window org-ref counsel projectile pdf-tools yaml-mode which-key use-package switch-window swiper rust-mode org-roam org-mime nix-mode mpdel magit hl-todo helm haskell-mode elfeed diminish diff-hl cmake-mode avy)))
+   '(exec-path-from-shell gcmh yaml-mode which-key switch-window sticky saveplace-pdf-view rustic rust-mode quelpa-use-package projectile org-roam org-mime openwith nix-mode mpdel modus-vivendi-theme modus-operandi-theme matrix-client magit lsp-mode hl-todo helm-ag haskell-mode flycheck elfeed diminish diff-hl counsel cmake-mode ace-window)))
+(put 'upcase-region 'disabled nil)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
-(put 'upcase-region 'disabled nil)
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#ffffff" :foreground "#000000" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "    " :family "Go Mono")))))

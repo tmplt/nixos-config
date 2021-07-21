@@ -77,6 +77,10 @@
   programs.sway.enable = true;
   hardware.opengl.enable = true;
 
+  environment.loginShellInit = ''
+    [[ "$(tty)" == /dev/tty1 ]] && exec ${pkgs.sway}/bin/sway
+  '';
+
   # Convenience symlinks for emacs, offlineimap
   environment.etc = {
     "nix/pins/cacert".source = pkgs.cacert;

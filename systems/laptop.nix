@@ -87,10 +87,25 @@
     "nix/pins/mu".source = pkgs.mu;
   };
 
+  security.sudo.enable = false;
+  security.doas = {
+    enable = true;
+    wheelNeedsPassword = true;
+    extraRules = [{
+      groups = [ "wheel" ];
+      noPass = false;
+      keepEnv = true;
+      persist = true;
+    }];
+  };
+
   # Fix for USB redirection in virt-manager(1).
   security.wrappers.spice-client-glib-usb-acl-helper.source =
     "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper";
-  environment.systemPackages = with pkgs; [ spice_gtk ];
+  environment.systemPackages = with pkgs; [
+    spice_gtk                   # needed for the above
+    git                         # needed for doas with nixos-rebuild --flake
+  ];
 
   # System services
 

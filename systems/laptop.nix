@@ -23,12 +23,6 @@
   boot.loader.systemd-boot.enable = true;
 
   hardware = {
-    pulseaudio.enable = true;
-    # Don't mute audio streams when VOIP programs are running.
-    pulseaudio.extraConfig = ''
-      unload-module module-role-cork
-    '';
-
     trackpoint.enable = true;
     trackpoint.emulateWheel = true;
 
@@ -38,7 +32,14 @@
   networking.hostName = "perscitia";
   networking.useDHCP = true;
   time.timeZone = "Europe/Stockholm";
-  sound.enable = true;
+
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 
   # User options
 

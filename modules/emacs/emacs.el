@@ -611,8 +611,7 @@ there are no attachments."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
-   '("~/exjobb/thesis/thesis.org" "~/org/work.org" "~/org/school.org" "~/org/home.org" "~/org/tasks.org" "~/exjobb/thesis/scratch.org"))
-(put 'upcase-region 'disabled nil)
+   '("~/exjobb/thesis/thesis.org" "~/org/work.org" "~/org/school.org" "~/org/home.org" "~/org/tasks.org" "~/exjobb/thesis/scratch.org")))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

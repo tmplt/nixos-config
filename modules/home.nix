@@ -189,6 +189,103 @@ let secrets = import ../secrets; in
     };
   };
 
+  programs.qutebrowser = {
+    enable = true;
+    enableDefaultBindings = false;
+
+    keyBindings = let
+      escapes = {
+        "<Escape><Escape><Escape>" = "mode-leave";
+        "<Ctrl-g>" = "mode-leave";
+      };
+    in {
+      normal = {
+        # Navigation
+        "<Ctrl-v>" = "scroll-page 0 0.5";
+        "<Alt-v>" = "scroll-page 0 -0.5";
+        "<Ctrl-Shift-v>" = "scroll-page 0 1";
+        "<Alt-Shift-v>" = "scroll-page 0 -1";
+        # FIXME come up with logical bindings for scrolling left/right
+
+        # Commands
+        "<Alt-x>" = "set-cmd-text :";
+        "<Ctrl-x>b" = "set-cmd-text -s :buffer";
+        "<Ctrl-x><Ctrl-c>" = "quit";
+
+        # searching
+        "<Ctrl-s>" = "set-cmd-text /";
+        "<Ctrl-r>" = "set-cmd-text ?";
+
+        # hinting
+        "<Ctrl-Space>" = "hint";
+        "<Ctrl-u><Ctrl-Space>" = "hint --rapid links tab-bg";
+        "<Ctrl-x>m" = "hint links spawn mpv {hint-url}";
+
+        "<Ctrl-x>r" = "reload";
+        "<Ctrl-x>cd" = "download-clear";
+        "<Ctrl-x>u" = "undo";
+
+        # history
+        "<Ctrl-f>" = "forward";
+        "<Ctrl-b>" = "back";
+
+        # tabs
+        "<Ctrl-x>0" = "tab-close";
+        "<Ctrl-x>1" = "tab-only";
+        "<Alt-a>" = "tab-prev";
+        "<Alt-e>" = "tab-next";
+
+        # open links
+        "<Ctrl-l>" = "set-cmd-text -s :open";
+        "<Alt-l>" = "set-cmd-text -s :open -t";
+
+        # editing
+        "<Ctrl-a>" = "fake-key <Home>";
+        "<Ctrl-e>" = "fake-key <End>";
+        "<Ctrl-n>" = "fake-key <Down>";
+        "<Ctrl-p>" = "fake-key <Up>";
+        "<Alt-f>" = "fake-key <Ctrl-Right>";
+        "<Alt-b>" = "fake-key <Ctrl-Left>";
+        "<Ctrl-d>" = "fake-key <Delete>";
+        "<Alt-d>" = "fake-key <Ctrl-Delete>";
+        "<Alt-backspace>" = "fake-key <Ctrl-Backspace>";
+        "<Ctrl-w>" = "yank";
+        "<Ctrl-y>" = "insert-text {primary}";
+
+        # Numbers
+        # <https://github.com/qutebrowser/qutebrowser/issues/4213>
+        "1" = "fake-key 1";
+        "2" = "fake-key 2";
+        "3" = "fake-key 3";
+        "4" = "fake-key 4";
+        "5" = "fake-key 5";
+        "6" = "fake-key 6";
+        "7" = "fake-key 7";
+        "8" = "fake-key 8";
+        "9" = "fake-key 9";
+        "0" = "fake-key 0";
+
+        "<Ctrl-h>" = "set-cmd-text -s :help";
+      } // escapes;
+
+      command = {
+        "<Ctrl-s>" = "search-next";
+        "<Ctrl-r>" = "search-prev";
+
+        "<Ctrl-p>" = "completion-item-focus prev";
+        "<Ctrl-n>" = "completion-item-focus next";
+
+        "<Alt-p>" = "command-history-prev";
+        "<Alt-n>" = "command-history-next";
+
+        "<Return>" = "command-accept";
+      } // escapes;
+
+      hint = { } // escapes;
+      caret = { } // escapes;
+    };
+  };
+
   programs.ssh = {
     enable = true;
     compression = true;

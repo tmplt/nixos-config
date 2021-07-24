@@ -153,6 +153,38 @@ let secrets = import ../secrets; in
     enableBashIntegration = true;
   };
 
+  programs.foot = {
+    enable = true;
+    settings = {
+      main = {
+        font = "GohuFont:style=regular:antialias=false:pixelsize=11";
+        pad = "10x10";
+        term = "xterm-256color";
+      };
+
+      colors = {
+        foreground="c2c2b0";
+        background="303030";
+        regular0="000000";  # black
+        regular1="d54e53";  # red
+        regular2="b0ca4a";  # green
+        regular3="e6c547";  # yellow
+        regular4="7aa6da";  # blue
+        regular5="c397d8";  # magenta
+        regular6="70c0ba";  # cyan
+        regular7="ffffff";  # white
+        bright0="000000";   # bright black
+        bright1="d54e53";   # bright red
+        bright2="b0ca4a";   # bright green
+        bright3="e6c547";   # bright yellow
+        bright4="7aa6da";   # bright blue
+        bright5="c397d8";   # bright magenta
+        bright6="70c0ba";   # bright cyan
+        bright7="ffffff";   # bright white
+      };
+    };
+  };
+
   programs.ssh = {
     enable = true;
     compression = true;

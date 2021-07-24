@@ -417,10 +417,18 @@ in { pkgs, config, ... }: {
         repeat_rate 35
       }
 
+      output * bg ~/wallpapers/shoe.jpg fill
+
       seat * hide_cursor 8000
 
       bindsym Mod4+Control+e exec emacsclient --create-frame --alternate-editor="";
       bindsym Mod4+x exec dmenu_run
+
+      exec swayidle -w  \
+           timeout 300 'swaylock -i ~/wallpapers/shoebill.jpg' \
+           timeout 600 'swaymsg "output * dpms off"' \
+                resume 'swaymsg "output * dpms on"' \
+           before-sleep 'swaylock -i ~/wallpapers/shoebill.jpg'
     '';
   };
 

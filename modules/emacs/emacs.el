@@ -98,16 +98,9 @@
 
 (global-set-key (kbd "<s-C-return>") 'eshell-other-window)
 
-;; Minimize garbage collection during startup
-(setq gc-cons-threshold most-positive-fixnum)
-
-;; Lower threshold back to 8 MiB (default is 800kB)
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (* 25 1024 1024))))
-
-(add-hook 'focuso-out-hook #'garbage-collect)
+(add-hook 'focus-out-hook #'garbage-collect)
 (use-package gcmh
+  :diminish gcmh-mode
   :init
   (gcmh-mode 1))
 

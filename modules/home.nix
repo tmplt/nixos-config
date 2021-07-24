@@ -182,59 +182,6 @@ let secrets = import ../secrets; in
     };
   };
 
-  programs.autorandr =
-    let
-      laptopEDID = "00ffffffffffff0030e4d3020000000000150103801c1078ea10a59658578f2820505400000001010101010101010101010101010101381d56d45000163030202500159c1000001b000000000000000000000000000000000000000000fe004c4720446973706c61790a2020000000fe004c503132355748322d544c423100f7";
-      dockedEDID = "00ffffffffffff0022f057290000000025160104b53c2278222e25a7554d9e260c505420000081c00101010101010101010101010101565e00a0a0a029503020220255502100001a1a1d008051d01c204080750055502100001e000000fc004850205a5232373430770a2020000000ff00434e54323337573046560a2020009f";
-      workEDID = "00ffffffffffff00410c42c1f41b00000b1b0104b55932783a1571ad5047a726125054bfef00d1c0b30095008180814081c0010101014dd000a0f0703e803020350075f23100001aa36600a0f0701f803020350075f23100001a000000fd0017501ea03c010a202020202020000000fc0050484c2042444d34303337550a0194020326f14b0103051404131f1202119023090707830100006d030c0020001878200060010203011d007251d01e206e28550075f23100001e8c0ad08a20e02d10103e960075f2310000188c0ad090204031200c40550075f2310000184d6c80a070703e8030203a0075f23100001a000000000000000000000000000000000025";
-    in
-    {
-      enable = true;
-      profiles = {
-        "mobile" = {
-          fingerprint.LVDS-1 = laptopEDID;
-          config = {
-            LVDS-1 = {
-              enable = true;
-              mode = "1366x768";
-            };
-          };
-        };
-
-        "docked" = {
-          fingerprint.LVDS-1 = laptopEDID;
-          fingerprint.DP-2 = dockedEDID;
-          config = {
-            LVDS-1 = {
-              enable = true;
-              mode = "1366x768";
-            };
-            DP-2 = {
-              enable = true;
-              mode = "2560x1440";
-              position = "1366x0";
-            };
-          };
-        };
-
-        "work" = {
-          fingerprint.LVDS-1 = laptopEDID;
-          fingerprint.DP-1 = workEDID;
-          config = {
-            LVDS-1.enable = false;
-            DP-1 = {
-              enable = true;
-              mode = "3840x2160";
-            };
-          };
-        };
-      };
-
-      hooks.postswitch = {
-        "change-background" = "${pkgs.systemd}/bin/systemctl --user start random-background";
-      };
-    };
-
   services.mpd = {
     enable = true;
     musicDirectory = "/mnt/dulcia/music";

@@ -2,6 +2,10 @@ let secrets = import ../secrets; in
 { pkgs, config, ... }: {
   home.sessionPath = [ "/home/tmplt/.cargo/bin" ];
 
+  home.file = {
+    ".emacs.d/init.el".source = ./emacs/emacs.el;
+  };
+
   accounts.email.maildirBasePath = "mail";
   accounts.email.accounts = {
     "tmplt" = rec {

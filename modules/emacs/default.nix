@@ -4,10 +4,7 @@ let
     config = ./emacs.el;
     package = pkgs.emacsPgtkGcc;
     alwaysEnsure = true;
-    extraEmacsPackages = epkgs: with epkgs; [
-      modus-operandi-theme
-      modus-vivendi-theme
-    ];
+    extraEmacsPackages = epkgs: with epkgs; [];
   };
 in
 {

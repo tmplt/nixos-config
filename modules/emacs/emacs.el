@@ -240,6 +240,7 @@
 ;;          ("C-c n j" . org-roam-jump-to-index)))
 
 (use-package org-ref
+  :ensure nil
   :config
   (setq reftex-default-bibliography '("~/org/bib/ref.bib")
         org-ref-default-bibliography reftex-default-bibliography
@@ -499,9 +500,11 @@ there are no attachments."
                                                  "on" "off"))))))
 
 (use-package ivy
+  :diminish ivy-mode
   :init
   (ivy-mode 1))
 (use-package counsel
+  :diminish counsel-mode
   :init
   (counsel-mode 1)
   :bind (("M-y" . counsel-yank-pop)

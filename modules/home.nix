@@ -1,10 +1,8 @@
-let secrets = import ../secrets; in
-{ pkgs, config, ... }: {
+let secrets = import ../secrets;
+in { pkgs, config, ... }: {
   home.sessionPath = [ "/home/tmplt/.cargo/bin" ];
 
-  home.file = {
-    ".emacs.d/init.el".source = ./emacs/emacs.el;
-  };
+  home.file = { ".emacs.d/init.el".source = ./emacs/emacs.el; };
 
   accounts.email.maildirBasePath = "mail";
   accounts.email.accounts = {
@@ -92,7 +90,8 @@ let secrets = import ../secrets; in
       aliases = [ "viktor.vilhelm.sonesten@alumni.cern" ];
       userName = address;
       flavor = "gmail.com";
-      passwordCommand = "${pkgs.getmail}/bin/getmail-gmail-xoauth-tokens ~/nixops/secrets/gmail.uni.json";
+      passwordCommand =
+        "${pkgs.getmail}/bin/getmail-gmail-xoauth-tokens ~/nixops/secrets/gmail.uni.json";
 
       offlineimap = {
         enable = true;
@@ -104,33 +103,32 @@ let secrets = import ../secrets; in
     };
   };
   programs.mbsync.enable = true;
-  programs.mbsync.package = with pkgs; isync.overrideAttrs (old: {
-    buildInputs = [ openssl db gsasl zlib ];
-  });
+  programs.mbsync.package = with pkgs;
+    isync.overrideAttrs (old: { buildInputs = [ openssl db gsasl zlib ]; });
   programs.offlineimap.enable = true;
   programs.mu.enable = true;
   programs.msmtp.enable = true;
   services.mbsync = {
     enable = true;
     frequency = "*:0/1"; # every minute
-    package = with pkgs; isync.overrideAttrs (old: {
-      buildInputs = [ openssl db gsasl zlib ];
-    });
+    package = with pkgs;
+      isync.overrideAttrs (old: { buildInputs = [ openssl db gsasl zlib ]; });
     preExec = ''
       ${pkgs.coreutils}/bin/mkdir -p %h/mail/{tmplt,personal,ludd,personal}
     '';
 
     # FIXME mbsync isn't yet packaged to properly auth with gmail.
     # See <https://github.com/NixOS/nixpkgs/issues/108480>.
-    postExec = with pkgs; "${writeScript "mbsync-post" ''
-      #!${stdenv.shell}
-      ${pkgs.offlineimap}/bin/offlineimap -a uni || exit $?
+    postExec = with pkgs;
+      "${writeScript "mbsync-post" ''
+        #!${stdenv.shell}
+        ${pkgs.offlineimap}/bin/offlineimap -a uni || exit $?
 
-      ${pkgs.mu}/bin/mu index --quiet
-      # If the DB is already locked by mu4e, don't fail
-      retval=$?
-      [[ $retval -eq 19 ]] && exit 0 || exit $retval
-    ''}";
+        ${pkgs.mu}/bin/mu index --quiet
+        # If the DB is already locked by mu4e, don't fail
+        retval=$?
+        [[ $retval -eq 19 ]] && exit 0 || exit $retval
+      ''}";
   };
 
   manual.manpages.enable = true;
@@ -167,24 +165,24 @@ let secrets = import ../secrets; in
       };
 
       colors = {
-        foreground="c2c2b0";
-        background="303030";
-        regular0="000000";  # black
-        regular1="d54e53";  # red
-        regular2="b0ca4a";  # green
-        regular3="e6c547";  # yellow
-        regular4="7aa6da";  # blue
-        regular5="c397d8";  # magenta
-        regular6="70c0ba";  # cyan
-        regular7="ffffff";  # white
-        bright0="000000";   # bright black
-        bright1="d54e53";   # bright red
-        bright2="b0ca4a";   # bright green
-        bright3="e6c547";   # bright yellow
-        bright4="7aa6da";   # bright blue
-        bright5="c397d8";   # bright magenta
-        bright6="70c0ba";   # bright cyan
-        bright7="ffffff";   # bright white
+        foreground = "c2c2b0";
+        background = "303030";
+        regular0 = "000000"; # black
+        regular1 = "d54e53"; # red
+        regular2 = "b0ca4a"; # green
+        regular3 = "e6c547"; # yellow
+        regular4 = "7aa6da"; # blue
+        regular5 = "c397d8"; # magenta
+        regular6 = "70c0ba"; # cyan
+        regular7 = "ffffff"; # white
+        bright0 = "000000"; # bright black
+        bright1 = "d54e53"; # bright red
+        bright2 = "b0ca4a"; # bright green
+        bright3 = "e6c547"; # bright yellow
+        bright4 = "7aa6da"; # bright blue
+        bright5 = "c397d8"; # bright magenta
+        bright6 = "70c0ba"; # bright cyan
+        bright7 = "ffffff"; # bright white
       };
     };
   };
@@ -360,9 +358,7 @@ let secrets = import ../secrets; in
   wayland.windowManager.sway = {
     enable = true;
     systemdIntegration = true;
-    wrapperFeatures = {
-      gtk = true;
-    };
+    wrapperFeatures = { gtk = true; };
 
     config = {
       modifier = "Mod4";
@@ -388,7 +384,8 @@ let secrets = import ../secrets; in
   services.screen-locker = {
     enable = true;
     inactiveInterval = 10; # lock after 10min of inactivity
-    lockCmd = "${pkgs.swaylock}/bin/swaylock -ni /home/tmplt/wallpapers/shoebill.png";
+    lockCmd =
+      "${pkgs.swaylock}/bin/swaylock -ni /home/tmplt/wallpapers/shoebill.png";
   };
 
   services.random-background = {

@@ -145,16 +145,14 @@
 (setq c-default-style "linux")
 
 ;; load a decent colour theme; press F12 to switch between light/dark
-(load-theme 'modus-operandi t)
-(defun themes-toggle ()
-  (interactive)
-  (if (eq (car custom-enabled-themes) 'modus-operandi)
-      (progn
-        (disable-theme 'modus-operandi)
-        (load-theme 'modus-vivendi t))
-    (disable-theme 'modus-vivendi)
-    (load-theme 'modus-operandi t)))
-(global-set-key [f12] 'themes-toggle)
+(use-package modus-themes
+  :ensure
+  :init
+  (modus-themes-load-themes)
+  :config
+  (modus-themes-load-operandi)
+  :bind
+  ("<f12>" . modus-themes-toggle))
 
 ;; Delete any trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)

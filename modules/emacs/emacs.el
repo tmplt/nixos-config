@@ -489,6 +489,8 @@ there are no attachments."
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package magit
+  :config
+  (setq magit-diff-refine-hunk 'all)    ; Show word-granular diffs in all hunks
   :bind
   ("C-x g" . 'magit-status)
   ("C-c g" . 'magit-file-dispatch))

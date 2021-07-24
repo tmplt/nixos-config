@@ -293,6 +293,33 @@ in { pkgs, config, ... }: {
         "<Return>" = "command-accept";
       } // escapes;
 
+      prompt = {
+        "<Return>" = "prompt-accept";
+        "<Ctrl-p>" = "prompt-item-focus prev";
+        "<Ctrl-n>" = "prompt-item-focus next";
+        "<Alt-y>" = "prompt-yank";
+        "<Alt-Shift-y>" = "prompt-yank --sel";
+        "<Ctrl-b>" = "rl-backward-char";
+        "<Ctrl-f>" = "rl-forward-char";
+        "<Alt-b>" = "rl-backward-word";
+        "<Alt-f>" = "rl-forward-word";
+        "<Ctrl-a>" = "rl-beginning-of-line";
+        "<Ctrl-e>" = "rl-end-of-line";
+        "<Ctrl-u>" = "rl-unix-line-discard";
+        "<Ctrl-k>" = "rl-kill-line";
+        "<Alt-d>" = "rl-kill-word";
+        "<Ctrl-w>" = "rl-unix-word-rubout";
+        "<Alt-Backspace>" = "rl-backward-kill-word";
+        "<Ctrl-?>" = "rl-delete-char";
+        "<Ctrl-h>" = "rl-backward-delete-char";
+        "<Ctrl-y>" = "rl-yank";
+      } // escapes;
+
+      yesno = {
+        "y" = "prompt-accept yes";
+        "n" = "prompt-accept no";
+      } // escapes;
+
       hint = { } // escapes;
       caret = { } // escapes;
     };

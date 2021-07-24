@@ -423,6 +423,7 @@ in { pkgs, config, ... }: {
 
       bindsym Mod4+Control+e exec emacsclient --create-frame --alternate-editor="";
       bindsym Mod4+x exec dmenu_run
+      bindsym XF86ScreenSaver exec swaylock -i ~/wallpapers/shoebill.jpg
 
       exec swayidle -w  \
            timeout 300 'swaylock -i ~/wallpapers/shoebill.jpg' \

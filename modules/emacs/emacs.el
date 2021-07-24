@@ -442,9 +442,7 @@ there are no attachments."
 
 (use-package rustic
   :config
-  (setq rustic-lsp-client nil)
-  :init
-  (hs-minor-mode 1))
+  (setq rustic-lsp-client nil))
 (use-package nix-mode)
 (use-package diff-hl
   :config

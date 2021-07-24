@@ -381,19 +381,6 @@ in { pkgs, config, ... }: {
     '';
   };
 
-  services.screen-locker = {
-    enable = true;
-    inactiveInterval = 10; # lock after 10min of inactivity
-    lockCmd =
-      "${pkgs.swaylock}/bin/swaylock -ni /home/tmplt/wallpapers/shoebill.png";
-  };
-
-  services.random-background = {
-    enable = false;
-    enableXinerama = true;
-    imageDirectory = "%h/wallpapers";
-  };
-
   services.gammastep = {
     # FIXME kill immidiately on SIGTERM. Don't wait for it to dim
     # back; that blocks WM termination.

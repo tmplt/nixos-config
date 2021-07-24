@@ -150,21 +150,6 @@
 ;; Delete any trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(defun toggle-editting-columns-balanced ()
-  "Set both window margins so the edittable space is only 80 columns."
-  (interactive)
-  (let ((margins (window-margins)))
-    (if (or (car margins) (cdr margins))
-        (progn
-          (set-face-background 'fringe nil)
-          (set-window-margins nil 0 0))
-      (let* ((change (max (- (window-width) 90) 0))
-             (left (/ change 2))
-             (right (- change left)))
-        ;; (set-face-background 'fringe "#ff6f6f") ; TODO: set accent colour from theme
-        (set-window-margins nil left right)))))
-(global-set-key [f9] 'toggle-editting-columns-balanced)
-
 ;; Remember the cursor position of files when reopening them
 (setq save-place-file "~/.emacs.d/saveplace")
 (if (version<= emacs-version "25.1")
@@ -235,11 +220,6 @@
 
 (use-package org-agenda
   :ensure nil
-  :hook
-  (after-init . (lambda ()
-                  (setq inhibit-splash-screen t)
-                  (org-agenda-list)
-                  (delete-other-windows)))
   :config
   (org-add-agenda-custom-command
    '("u" alltodo "Unscheduled"
@@ -278,9 +258,6 @@
 ;; TODO send mail via postfix instead <http://pragmaticemacs.com/emacs/using-postfix-instead-of-smtpmail-to-send-email-in-mu4e/>
 ;; <https://etienne.depar.is/emacs.d/mu4e.html>
 ;; change From field on signature switch <https://github.com/djcb/mu/issues/776>
-(use-package org-mu4e
-  :ensure nil)
-(use-package org-mime)
 (use-package mu4e
   :ensure nil
   :config
@@ -470,9 +447,6 @@ there are no attachments."
   :init
   (hs-minor-mode 1))
 (use-package nix-mode)
-(use-package haskell-mode)
-(use-package yaml-mode)
-(use-package cmake-mode)
 (use-package diff-hl
   :config
   (global-diff-hl-mode)

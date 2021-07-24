@@ -610,12 +610,8 @@ there are no attachments."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("96c56bd2aab87fd92f2795df76c3582d762a88da5c0e54d30c71562b7bf9c605" default))
  '(org-agenda-files
    '("~/exjobb/thesis/thesis.org" "~/org/work.org" "~/org/school.org" "~/org/home.org" "~/org/tasks.org" "~/exjobb/thesis/scratch.org"))
- '(package-selected-packages
-   '(exec-path-from-shell gcmh yaml-mode which-key switch-window sticky saveplace-pdf-view rustic rust-mode quelpa-use-package projectile org-roam org-mime openwith nix-mode mpdel modus-vivendi-theme modus-operandi-theme matrix-client magit lsp-mode hl-todo helm-ag haskell-mode flycheck elfeed diminish diff-hl counsel cmake-mode ace-window)))
 (put 'upcase-region 'disabled nil)
 
 (custom-set-faces

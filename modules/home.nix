@@ -133,6 +133,20 @@ in { pkgs, config, ... }: {
 
   manual.manpages.enable = true;
 
+  programs.bash = {
+    enable = true;
+
+    initExtra = ''
+      eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
+    '';
+
+    shellAliases = {
+      nixre = "doas nixos-rebuild switch --flake ~/nixops";
+      nixrt = "doas nixos-rebuild test --flake ~/nixops";
+      nixrb = "doas nixos-rebuild build --flake ~/nixops";
+    };
+  };
+
   programs.git = {
     enable = true;
     userName = "Viktor Sonesten";

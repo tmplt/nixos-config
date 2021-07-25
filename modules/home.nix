@@ -462,6 +462,9 @@ in { pkgs, config, lib, ... }: {
           "q" = run-or-raise-browser;
           "Ctrl+q" = run-or-raise-browser;
 
+          # dmenu
+          "Return" = exec' "dmenu_run";
+
           # kill window
           "k" = exec "kill";
 

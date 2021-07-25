@@ -1,5 +1,5 @@
 let secrets = import ../secrets;
-in { pkgs, config, ... }: {
+in { pkgs, config, lib, ... }: {
   home.sessionPath = [ "/home/tmplt/.cargo/bin" ];
 
   home.file = { ".emacs.d/init.el".source = ./emacs/emacs.el; };
@@ -412,38 +412,42 @@ in { pkgs, config, ... }: {
     systemdIntegration = true;
     wrapperFeatures = { gtk = true; };
 
-    config = {
+    config = let
+      swaylock =
+        "${pkgs.swaylock}/bin/swaylock --show-keyboard-layout --image ${
+          ../wallpapers/lock.jpg
+        }";
+    in rec {
       modifier = "Mod4";
       terminal = "${pkgs.foot}/bin/foot";
+
+      keybindings = let mod = modifier;
+      in lib.mkOptionDefault {
+        "${mod}+Control+e" =
+          "exec emacsclient --create-frame --alternate-editor=";
+        "${mod}+x" = "exec dmenu_run";
+        "XF86ScreenSaver" = "exec ${swaylock}";
+      };
+
+      startup = [{
+        command = "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${swaylock}' before-sleep '${swaylock}'";
+        always = true;
+      }];
+
+      output = { "*" = { bg = "${../wallpapers/bg.jpg} fill"; }; };
+
+      input = {
+        "*" = {
+          xkb_layout = "us";
+          xkb_variant = "colemak";
+          xkb_options = "ctrl:nocaps,compose:menu,compose:rwin";
+          repeat_delay = "300";
+          repeat_rate = "35";
+        };
+      };
+
+      seat = { "*" = { hide_cursor = "8000"; }; };
     };
-
-    extraConfig = ''
-      input * {
-        xkb_layout us
-        xkb_variant colemak
-        xkb_options ctrl:nocaps,compose:menu,compose:rwin
-        repeat_delay 300
-        repeat_rate 35
-      }
-
-      set $bg ${../wallpapers/bg.jpg}
-      set $lockscreen ${../wallpapers/lock.jpg}
-      set $swaylock swaylock --show-keyboard-layout -i $lockscreen
-
-      output * bg $bg fill
-
-      seat * hide_cursor 8000
-
-      bindsym Mod4+Control+e exec emacsclient --create-frame --alternate-editor="";
-      bindsym Mod4+x exec dmenu_run
-      bindsym XF86ScreenSaver exec $swaylock
-
-      exec swayidle -w  \
-           timeout 300 '$swaylock' \
-           timeout 600 'swaymsg "output * dpms off"' \
-                resume 'swaymsg "output * dpms on"' \
-           before-sleep '$swaylock'
-    '';
   };
 
   services.gammastep = {

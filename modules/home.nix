@@ -203,8 +203,17 @@ in { pkgs, config, ... }: {
 
   programs.qutebrowser = {
     enable = true;
-    enableDefaultBindings = false;
 
+    settings = {
+      # infinite history eventually bogs command input down to a crawl,
+      # and I/O issues (duplicating keys) manifest.
+      completion.web_history.max_items = 250;
+
+      confirm_quit = [ "downloads" ];
+      content.autoplay = false;
+    };
+
+    enableDefaultBindings = false;
     keyBindings = let
       escapes = {
         "<Escape><Escape><Escape>" = "mode-leave";

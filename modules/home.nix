@@ -426,19 +426,23 @@ in { pkgs, config, ... }: {
         repeat_rate 35
       }
 
-      output * bg ~/wallpapers/shoe.jpg fill
+      set $bg ${../wallpapers/bg.jpg}
+      set $lockscreen ${../wallpapers/lock.jpg}
+      set $swaylock swaylock --show-keyboard-layout -i $lockscreen
+
+      output * bg $bg fill
 
       seat * hide_cursor 8000
 
       bindsym Mod4+Control+e exec emacsclient --create-frame --alternate-editor="";
       bindsym Mod4+x exec dmenu_run
-      bindsym XF86ScreenSaver exec swaylock -i ~/wallpapers/shoebill.jpg
+      bindsym XF86ScreenSaver exec $swaylock
 
       exec swayidle -w  \
-           timeout 300 'swaylock -i ~/wallpapers/shoebill.jpg' \
+           timeout 300 '$swaylock' \
            timeout 600 'swaymsg "output * dpms off"' \
                 resume 'swaymsg "output * dpms on"' \
-           before-sleep 'swaylock -i ~/wallpapers/shoebill.jpg'
+           before-sleep '$swaylock'
     '';
   };
 

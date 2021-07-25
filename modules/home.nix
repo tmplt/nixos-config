@@ -447,12 +447,12 @@ in { pkgs, config, lib, ... }: {
             }
             swaymsg "[app_id=$class] focus" || swaymsg "[class=$class] focus"
           '';
-          run-or-raise-emacs =
-            "exec 'swaymsg mode default; ${run-or-raise} emacsclient emacs emacsclient --create-frame --alternate-editor='";
-          run-or-raise-browser =
-            "exec 'swaymsg mode default; ${run-or-raise} qutebrowser qutebrowser qutebrowser'";
           exec = cmd: "exec 'swaymsg ${cmd}; swaymsg mode default'";
           exec' = cmd: "exec 'swaymsg mode default; ${cmd}'";
+          run-or-raise-emacs = exec'
+            "${run-or-raise} emacsclient emacs emacsclient --create-frame --alternate-editor=";
+          run-or-raise-browser =
+            exec' "${run-or-raise} qutebrowser qutebrowser qutebrowser";
         in {
           # launch common programs
           "c" = exec' terminal;

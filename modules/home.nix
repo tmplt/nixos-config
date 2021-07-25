@@ -463,7 +463,7 @@ in { pkgs, config, lib, ... }: {
           "Ctrl+q" = run-or-raise-browser;
 
           # dmenu
-          "Return" = exec' "dmenu_run";
+          "d" = exec' "dmenu_run";
 
           # kill window
           "k" = exec "kill";
@@ -471,10 +471,14 @@ in { pkgs, config, lib, ... }: {
           # navigation
           "Ctrl+p" = exec "workspace prev";
           "Ctrl+n" = exec "workspace next";
+          "Space" = exec "workspace next";
           "n" = exec "focus down";
           "p" = exec "focus up";
           "f" = exec "focus right";
           "b" = exec "focus left";
+
+          # fullscreen
+          "Return" = exec "fullscreen toggle";
 
           # splitting
           "s" = exec "split vertical";
@@ -504,6 +508,8 @@ in { pkgs, config, lib, ... }: {
             # Focus on the chosen window
             swaymsg [con_id=$CON_ID] focus
           '');
+
+          # TODO(t) sent <C-t>; wait for <https://github.com/swaywm/sway/issues/1779>
         } // escapes;
       };
 

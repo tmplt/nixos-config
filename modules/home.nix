@@ -477,7 +477,30 @@ in { pkgs, config, lib, ... }: {
           "s" = exec "split vertical";
           "Shift+s" = exec "split horizontal";
 
-          # TODO(w) list of windows to change to
+          # window switcher, adapted from <https://github.com/AdrienLeGuillou/sway_window_swithcher_dmenu/blob/master/sws.sh>.
+          "w" = exec' (pkgs.writeShellScript "sway-window-switcher" ''
+            # Get the container ID from the node tree
+            CON_ID=$(swaymsg -t get_tree | \
+                ${pkgs.jq}/bin/jq -r ".nodes[]
+                    | {output: .name, content: .nodes[]}
+                    | {output: .output, workspace: .content.name,
+                      apps: .content
+                        | ..
+                        | {id: .id?|tostring, name: .name?, app_id: .app_id?, shell: .shell?}
+                        | select(.app_id != null or .shell != null)}
+                    | {output: .output, workspace: .workspace,
+                       id: .apps.id, app_id: .apps.app_id, name: .apps.name }
+                    | \"W:\" + .workspace + \" | \" + .app_id + \" - \" + .name + \" (\" + .id + \")\"
+                    | tostring" | \
+                ${pkgs.dmenu}/bin/dmenu -i -p "Window Switcher")
+
+            # Requires the actual `id` to be at the end and between paretheses
+            CON_ID=''${CON_ID##*(}
+            CON_ID=''${CON_ID%)}
+
+            # Focus on the chosen window
+            swaymsg [con_id=$CON_ID] focus
+          '');
         } // escapes;
       };
 

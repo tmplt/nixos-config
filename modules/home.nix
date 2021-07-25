@@ -427,10 +427,63 @@ in { pkgs, config, lib, ... }: {
           "exec emacsclient --create-frame --alternate-editor=";
         "${mod}+x" = "exec dmenu_run";
         "XF86ScreenSaver" = "exec ${swaylock}";
+        "Ctrl+t" = "mode stumpwm";
+      };
+
+      modes = let
+        escapes = {
+          "Ctrl+g" = "mode default";
+          "Escape" = "mode default";
+        };
+      in lib.mkOptionDefault {
+        stumpwm = let
+          run-or-raise = pkgs.writeShellScript "sway-run-or-raise" ''
+            pstring="$1"; shift 1
+            class="$1"; shift 1
+            runstring="$@"
+            ${pkgs.procps}/bin/pkill -0 $pstring || {
+              ''${runsting} &
+              exit 0
+            }
+            swaymsg "[app_id=$class] focus" || swaymsg "[class=$class] focus"
+          '';
+          run-or-raise-emacs =
+            "exec 'swaymsg mode default; ${run-or-raise} emacsclient emacs emacsclient --create-frame --alternate-editor='";
+          run-or-raise-browser =
+            "exec 'swaymsg mode default; ${run-or-raise} qutebrowser qutebrowser qutebrowser'";
+          exec = cmd: "exec 'swaymsg ${cmd}; swaymsg mode default'";
+          exec' = cmd: "exec 'swaymsg mode default; ${cmd}'";
+        in {
+          # launch common programs
+          "c" = exec' terminal;
+          "Ctrl+c" = exec' terminal;
+          "e" = run-or-raise-emacs;
+          "Ctrl+e" = run-or-raise-emacs;
+          "q" = run-or-raise-browser;
+          "Ctrl+q" = run-or-raise-browser;
+
+          # kill window
+          "k" = exec "kill";
+
+          # navigation
+          "Ctrl+p" = exec "workspace prev";
+          "Ctrl+n" = exec "workspace next";
+          "n" = exec "focus down";
+          "p" = exec "focus up";
+          "f" = exec "focus right";
+          "b" = exec "focus left";
+
+          # splitting
+          "s" = exec "split vertical";
+          "Shift+s" = exec "split horizontal";
+
+          # TODO(w) list of windows to change to
+        } // escapes;
       };
 
       startup = [{
-        command = "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${swaylock}' before-sleep '${swaylock}'";
+        command =
+          "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${swaylock}' before-sleep '${swaylock}'";
         always = true;
       }];
 

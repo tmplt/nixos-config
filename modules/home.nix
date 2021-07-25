@@ -442,7 +442,7 @@ in { pkgs, config, lib, ... }: {
             class="$1"; shift 1
             runstring="$@"
             ${pkgs.procps}/bin/pkill -0 $pstring || {
-              ''${runsting} &
+              ''${runstring} &
               exit 0
             }
             swaymsg "[app_id=$class] focus" || swaymsg "[class=$class] focus"

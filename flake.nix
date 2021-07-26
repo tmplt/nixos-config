@@ -15,13 +15,11 @@
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
 
           ./systems/laptop.nix
-          ({ pkgs, ... }: {
-            nixpkgs.overlays = [ emacs.overlay ];
-            imports = [ ./modules/emacs ];
-          })
 
           home-manager.nixosModules.home-manager
           {
+            nixpkgs.overlays = [ emacs.overlay ];
+
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.tmplt = import ./modules/home.nix;

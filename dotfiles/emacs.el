@@ -6,6 +6,10 @@
    'load-path "/etc/nix/pins/mu/share/emacs/site-lisp")
   (package-initialize))
 
+;; (use-package benchmark-init
+;;   :config
+;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
 ;;;; Vanilla Emacs options
 
 ;; By default, use spaces for indentation

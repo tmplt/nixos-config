@@ -2,7 +2,7 @@ let secrets = import ../secrets;
 in { pkgs, config, lib, ... }: {
   home.sessionPath = [ "/home/tmplt/.cargo/bin" ];
 
-  home.file = { ".emacs.d/init.el".source = ./emacs/emacs.el; };
+  home.file = { ".emacs.d/init.el".source = ../dotfiles/emacs.el; };
 
   accounts.email.maildirBasePath = "mail";
   accounts.email.accounts = {
@@ -154,15 +154,6 @@ in { pkgs, config, lib, ... }: {
     package = pkgs.gitAndTools.gitFull;
   };
 
-  home.packages = with pkgs; [
-    # for wayland
-    swaylock
-    swayidle
-    wl-clipboard
-    alacritty
-    dmenu
-  ];
-
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
@@ -200,6 +191,28 @@ in { pkgs, config, lib, ... }: {
       };
     };
   };
+
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacsWithPackagesFromUsePackage {
+      config = ../dotfiles/emacs.el;
+      package = pkgs.emacsPgtkGcc;
+      alwaysEnsure = true;
+      extraEmacsPackages = epkgs: with epkgs; [ ];
+    };
+  };
+  home.packages = with pkgs; [
+    # needed by pdf-tools
+    imagemagick
+    # needed by mu4e
+    msmtp
+    # needed by rustic
+    pandoc
+    ripgrep
+    fd
+
+    wl-clipboard # may come in handy
+  ];
 
   programs.qutebrowser = {
     enable = true;
@@ -418,14 +431,11 @@ in { pkgs, config, lib, ... }: {
           ../wallpapers/lock.jpg
         }";
     in rec {
-      modifier = "Mod4";
+      modifier = "Mod4"; # effectively unused
       terminal = "${pkgs.foot}/bin/foot";
 
       keybindings = let mod = modifier;
       in lib.mkOptionDefault {
-        "${mod}+Control+e" =
-          "exec emacsclient --create-frame --alternate-editor=";
-        "${mod}+x" = "exec dmenu_run";
         "XF86ScreenSaver" = "exec ${swaylock}";
         "Ctrl+t" = "mode stumpwm";
       };
@@ -438,29 +448,23 @@ in { pkgs, config, lib, ... }: {
       in lib.mkOptionDefault {
         stumpwm = let
           run-or-raise = pkgs.writeShellScript "sway-run-or-raise" ''
-            pstring="$1"; shift 1
-            class="$1"; shift 1
-            runstring="$@"
-            ${pkgs.procps}/bin/pkill -0 $pstring || {
-              ''${runstring} &
+            prog="$@"
+            ${pkgs.procps}/bin/pkill -0 ''${prog} || {
+              ''${prog} &
               exit 0
             }
-            swaymsg "[app_id=$class] focus" || swaymsg "[class=$class] focus"
+            swaymsg "[app_id=''${prog}] focus" || swaymsg "[class=''${prog}] focus"
           '';
           exec = cmd: "exec 'swaymsg ${cmd}; swaymsg mode default'";
           exec' = cmd: "exec 'swaymsg mode default; ${cmd}'";
-          run-or-raise-emacs = exec'
-            "${run-or-raise} emacsclient emacs emacsclient --create-frame --alternate-editor=";
-          run-or-raise-browser =
-            exec' "${run-or-raise} qutebrowser qutebrowser qutebrowser";
         in {
           # launch common programs
           "c" = exec' terminal;
           "Ctrl+c" = exec' terminal;
-          "e" = run-or-raise-emacs;
-          "Ctrl+e" = run-or-raise-emacs;
-          "q" = run-or-raise-browser;
-          "Ctrl+q" = run-or-raise-browser;
+          "e" = exec' "${run-or-raise} emacs";
+          "Ctrl+e" = exec' "${run-or-raise} emacs";
+          "q" = exec' "${run-or-raise} qutebrowser";
+          "Ctrl+q" = exec' "${run-or-raise} qutebrowser";
 
           # dmenu
           "d" = exec' "dmenu_run";
@@ -513,11 +517,13 @@ in { pkgs, config, lib, ... }: {
         } // escapes;
       };
 
-      startup = [{
-        command =
-          "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${swaylock}' before-sleep '${swaylock}'";
-        always = true;
-      }];
+      startup = [
+        {
+          command =
+            "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${swaylock}' before-sleep '${swaylock}'";
+        }
+        { command = "emacs"; }
+      ];
 
       output = { "*" = { bg = "${../wallpapers/bg.jpg} fill"; }; };
 

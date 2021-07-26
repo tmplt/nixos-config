@@ -346,6 +346,7 @@ in { pkgs, config, lib, ... }: {
 
       hint = { } // escapes;
       caret = { } // escapes;
+      insert = { } // escapes;
     };
   };
 

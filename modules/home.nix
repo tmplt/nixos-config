@@ -229,7 +229,7 @@ in { pkgs, config, lib, ... }: {
     enableDefaultBindings = false;
     keyBindings = let
       escapes = {
-        "<Escape><Escape><Escape>" = "mode-leave";
+        "<Escape>" = "mode-leave";
         "<Ctrl-g>" = "mode-leave";
       };
       rls = {
@@ -346,7 +346,7 @@ in { pkgs, config, lib, ... }: {
 
       hint = { } // escapes;
       caret = { } // escapes;
-      insert = { } // escapes;
+      insert = { } // escapes // rls;
     };
   };
 

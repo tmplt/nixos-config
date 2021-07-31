@@ -10,6 +10,8 @@
 ;;   :config
 ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
+(setq use-package-always-defer t)       ; always load features lazily
+
 ;;;; Vanilla Emacs options
 
 ;; By default, use spaces for indentation
@@ -264,6 +266,7 @@
 ;; <https://etienne.depar.is/emacs.d/mu4e.html>
 ;; change From field on signature switch <https://github.com/djcb/mu/issues/776>
 (use-package mu4e
+  :demand t
   :ensure nil
   :config
   (setq send-mail-function 'smtpmail-send-it
@@ -449,6 +452,7 @@ there are no attachments."
   (setq rustic-lsp-client nil))
 (use-package nix-mode)
 (use-package diff-hl
+  :demand t
   :config
   (global-diff-hl-mode)
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)

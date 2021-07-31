@@ -70,6 +70,14 @@
 (global-set-key (kbd "s-C-<down>") 'shrink-window)
 (global-set-key (kbd "s-C-<up>") 'enlarge-window)
 
+(use-package dired
+  :bind (:map dired-mode-map
+              ("J" . #'dired-up-directory))
+  :config
+  (setq dired-listing-switches "-alsh --group-directories-first"
+        dired-use-ls-dired t
+        dired-auto-revert-buffer t))
+
 (setq dired-listing-switches "-alsh --group-directories-first"
       dired-use-ls-dired t)
 

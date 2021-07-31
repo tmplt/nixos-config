@@ -107,11 +107,7 @@
 
 (global-set-key (kbd "<s-C-return>") 'eshell-other-window)
 
-(add-hook 'focus-out-hook #'garbage-collect)
-(use-package gcmh
-  :diminish gcmh-mode
-  :init
-  (gcmh-mode 1))
+(setq gc-cons-threshold (* 100 1024 1024)) ; 100MB
 
 ;; Display line numbers
 ;; TODO: make this into a dolist

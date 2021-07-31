@@ -12,6 +12,9 @@
 
 (setq use-package-always-defer t)       ; always load features lazily
 
+;; prevent accidental usage of `list-buffers'
+(bind-key "C-x C-b" #'switch-to-buffer)
+
 ;;;; Vanilla Emacs options
 
 ;; By default, use spaces for indentation

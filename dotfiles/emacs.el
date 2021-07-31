@@ -510,17 +510,38 @@ there are no attachments."
                   (message "mpd: random: %s" (if (not libmpdel--random) ; I have no idea why I must negate here. Behaves as expected in 'eval-expression
                                                  "on" "off"))))))
 
-(use-package ivy
-  :diminish ivy-mode
+(use-package selectrum
   :init
-  (ivy-mode 1))
+  (selectrum-mode +1))
+(use-package prescient
+  :config
+  (prescient-persist-mode +1))
+(use-package selectrum-prescient
+  :demand t
+  :after selectrum
+  :config
+  (selectrum-prescient-mode +1))
+(use-package projectile
+  :config
+  (setq projectile-completion-system 'default)
+
+  (setq projectile-switch-project-action 'projectile-commander)
+  (def-projectile-commander-method ?\C-m
+    "Find file in project"
+    (call-interactively #'find-file))
+
+  (setq projectile-enable-caching t)
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map)))
+
 (use-package counsel
   :diminish counsel-mode
   :init
   (counsel-mode 1)
-  :bind (("M-y" . counsel-yank-pop)
-         :map ivy-minibuffer-map
-         ("M-y" . ivy-next-line)))
+  :bind
+  ("M-y" . counsel-yank-pop))
 (use-package swiper
   :bind ("C-s" . 'swiper))
 
@@ -547,14 +568,6 @@ there are no attachments."
 
 (use-package org-pdftools
   :hook (org-mode . org-pdftools-setup-link))
-
-(use-package projectile
-  :config
-  (setq projectile-enable-caching t)
-  :init
-  (projectile-mode +1)
-  :bind (:map projectile-mode-map
-              ("C-c p" . projectile-command-map)))
 
 ;; https://sachachua.com/blog/2021/02/guest-post-bookmarking-pdfs-in-emacs-with-pdf-tools-and-registers/
 ;; Make <C-f1> and <C-f2> save at point & jump to region.

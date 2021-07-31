@@ -472,6 +472,9 @@ there are no attachments."
   ("C-x g" . 'magit-status)
   ("C-c g" . 'magit-file-dispatch))
 
+(use-package forge
+  :after magit)
+
 ;; highlight the following strings
 ;;;; TODO: add the following keywords for Org mode:
 ;; TODO: something that needs doing

@@ -152,6 +152,10 @@ in { pkgs, config, lib, ... }: {
     userName = "Viktor Sonesten";
     userEmail = "v@tmplt.dev";
     package = pkgs.gitAndTools.gitFull;
+
+    extraConfig = {
+      github.user = "tmplt";
+    };
   };
 
   programs.direnv = {

@@ -467,7 +467,7 @@ there are no attachments."
 
 (use-package magit
   :config
-  (setq magit-diff-refine-hunk 'all)    ; Show word-granular diffs in all hunks
+  (setq magit-diff-refine-hunk t)    ; Show word-granular diffs in current hunk
   :bind
   ("C-x g" . 'magit-status)
   ("C-c g" . 'magit-file-dispatch))

@@ -196,7 +196,7 @@ in { pkgs, config, lib, ... }: {
     enable = true;
     package = pkgs.emacsWithPackagesFromUsePackage {
       config = ../dotfiles/emacs.el;
-      package = pkgs.emacsPgtkGcc;
+      package = pkgs.emacsPgtk;
       alwaysEnsure = true;
       extraEmacsPackages = epkgs: with epkgs; [ ];
     };

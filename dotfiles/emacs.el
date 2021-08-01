@@ -70,7 +70,9 @@
 (global-set-key (kbd "s-C-<down>") 'shrink-window)
 (global-set-key (kbd "s-C-<up>") 'enlarge-window)
 
-(use-package dired
+(defalias 'use-vanilla-package 'use-package)
+
+(use-vanilla-package dired
   :bind (:map dired-mode-map
               ("J" . #'dired-up-directory))
   :config

@@ -216,6 +216,15 @@ in { pkgs, config, lib, ... }: {
     fd
 
     wl-clipboard # may come in handy
+
+    (writeShellScriptBin "scrot" ''
+      ${sway}/bin/swaymsg -t get_tree | jq -r '..
+                                      | (.nodes? // empty)[]
+                                      | select(.pid and .visible)
+                                      | .rect
+                                      | "\(.x),\(.y) \(.width)x\(.height)"' \
+          | ${slurp}/bin/slurp | ${grim}/bin/grim -g - ~/tmp/$(${coreutils}/bin/date --iso-8601=seconds).png
+    '')
   ];
 
   programs.qutebrowser = {

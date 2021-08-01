@@ -474,6 +474,7 @@ there are no attachments."
   ("C-c g" . 'magit-file-dispatch))
 
 (use-package forge
+  :demand t
   :after magit)
 
 ;; highlight the following strings

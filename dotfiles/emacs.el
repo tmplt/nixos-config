@@ -515,6 +515,13 @@ there are no attachments."
                   (message "mpd: random: %s" (if (not libmpdel--random) ; I have no idea why I must negate here. Behaves as expected in 'eval-expression
                                                  "on" "off"))))))
 
+(use-package counsel
+  :diminish counsel-mode
+  :bind
+  ("M-y" . counsel-yank-pop))
+(use-package swiper
+  :bind ("C-s" . 'swiper))
+
 (use-package selectrum
   :init
   (selectrum-mode +1))
@@ -540,15 +547,6 @@ there are no attachments."
   (projectile-mode +1)
   :bind (:map projectile-mode-map
               ("C-c p" . projectile-command-map)))
-
-(use-package counsel
-  :diminish counsel-mode
-  :init
-  (counsel-mode 1)
-  :bind
-  ("M-y" . counsel-yank-pop))
-(use-package swiper
-  :bind ("C-s" . 'swiper))
 
 (use-package diminish
   :init

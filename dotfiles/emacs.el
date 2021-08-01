@@ -455,6 +455,7 @@ there are no attachments."
                         (unless (use-region-p) (forward-line)))))))
 
 (use-package rustic
+  :demand t
   :config
   (setq rustic-lsp-client nil))
 (use-package nix-mode)

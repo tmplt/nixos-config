@@ -231,9 +231,13 @@ in { pkgs, config, lib, ... }: {
     enable = true;
 
     settings = {
-      # infinite history eventually bogs command input down to a crawl,
-      # and I/O issues (duplicating keys) manifest.
-      completion.web_history.max_items = 250;
+      # infinite history and no delay eventually bogs command input down
+      # to a crawl, and I/O issues (key duplication) manifest.
+      completion = {
+        web_history.max_items = 250;
+        delay = 100; # ms
+        height = "25%";
+      };
 
       confirm_quit = [ "downloads" ];
       content.autoplay = false;

@@ -154,7 +154,6 @@
 
 ;; load a decent colour theme; press F12 to switch between light/dark
 (use-package modus-themes
-  :ensure
   :init
   (modus-themes-load-themes)
   :config
@@ -234,7 +233,6 @@
   ("C-c c" . 'org-capture))    ; add a template for daily org-roam notes
 
 (use-package org-agenda
-  :ensure nil
   :config
   (org-add-agenda-custom-command
    '("u" alltodo "Unscheduled"
@@ -255,7 +253,6 @@
 ;;          ("C-c n j" . org-roam-jump-to-index)))
 
 (use-package org-ref
-  :ensure nil
   :config
   (setq reftex-default-bibliography '("~/org/bib/ref.bib")
         org-ref-default-bibliography reftex-default-bibliography
@@ -274,9 +271,9 @@
 ;; TODO send mail via postfix instead <http://pragmaticemacs.com/emacs/using-postfix-instead-of-smtpmail-to-send-email-in-mu4e/>
 ;; <https://etienne.depar.is/emacs.d/mu4e.html>
 ;; change From field on signature switch <https://github.com/djcb/mu/issues/776>
+;; TODO mu4e-dashboard <https://github.com/rougier/mu4e-dashboard>
 (use-package mu4e
   :demand t
-  :ensure nil
   :config
   (setq send-mail-function 'smtpmail-send-it
         message-send-mail-function 'message-send-mail-with-sendmail

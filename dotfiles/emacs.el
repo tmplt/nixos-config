@@ -466,7 +466,6 @@ there are no attachments."
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package magit
-  :demand t
   :config
   (setq magit-diff-refine-hunk t)    ; Show word-granular diffs in current hunk
   (setq magit-pre-display-buffer-hook nil) ; don't restore windows when magit closes

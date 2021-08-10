@@ -39,13 +39,6 @@
 
 ;; Insert closing pair after point ant highlight matching pairs
 (show-paren-mode t)
-(setq electric-pair-pairs '(
-                            (?\{ . ?\})
-                            (?\( . ?\))
-                            (?\[ . ?\])
-                            (?\" . ?\")
-                            ))
-(electric-pair-mode t)
 
 ;; Disable some bindings
 (global-unset-key (kbd "C-z"))          ; (suspend-frame)
@@ -476,6 +469,17 @@ there are no attachments."
 (use-package forge
   :demand t
   :after magit)
+
+(use-package smartparens
+  :hook
+  (prog-mode . smartparens-mode)
+  (text-mode . smartparens-mode)
+  (markdown-mode . smartparens-mode)
+  :bind
+  ("M-]" . 'sp-next-sexp)
+  ("M-[" . 'sp-previous-sexp)
+  :init
+  (require 'smartparens-config))
 
 ;; highlight the following strings
 ;;;; TODO: add the following keywords for Org mode:

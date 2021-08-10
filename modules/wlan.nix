@@ -10,6 +10,7 @@ in
   networking.wireless = {
     enable = true;
     userControlled.enable = true;
+    interfaces = [ "wlp3s0" ];
   };
 
   environment.systemPackages = with pkgs; [

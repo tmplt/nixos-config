@@ -537,8 +537,13 @@ in { pkgs, config, lib, ... }: {
 
       startup = [
         {
-          command =
-            "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${swaylock}' before-sleep '${swaylock}'";
+          command = ''
+            ${pkgs.swayidle}/bin/swayidle -w \
+                    timeout 300 "${swaylock} --daemonize" \
+                    timeout 305 "swaymsg 'output * dpms off'" \
+                    resume "swaymsg 'output * dpms on'" \
+                    before-sleep "${swaylock}"
+          '';
         }
         { command = "emacs"; }
       ];

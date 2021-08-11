@@ -540,12 +540,6 @@ there are no attachments."
 (use-package projectile
   :config
   (setq projectile-completion-system 'default)
-
-  (setq projectile-switch-project-action 'projectile-commander)
-  (def-projectile-commander-method ?\C-m
-    "Find file in project"
-    (call-interactively #'find-file))
-
   (setq projectile-enable-caching t)
   :init
   (projectile-mode +1)

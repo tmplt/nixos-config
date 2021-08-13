@@ -632,6 +632,13 @@ there are no attachments."
   :config
   (openwith-mode t))
 
+(use-package olivetti
+  :demand t
+  :init
+  (setq olivetti-body-width 0.7)
+  :bind
+  ("<f9>" . olivetti-mode))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

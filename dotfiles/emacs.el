@@ -225,7 +225,7 @@
   ("C-c d" . 'org-todo)
   ("C-c c" . 'org-capture))    ; add a template for daily org-roam notes
 
-(use-package org-agenda
+(use-vanilla-package org-agenda
   :config
   (org-add-agenda-custom-command
    '("u" alltodo "Unscheduled"
@@ -265,7 +265,7 @@
 ;; <https://etienne.depar.is/emacs.d/mu4e.html>
 ;; change From field on signature switch <https://github.com/djcb/mu/issues/776>
 ;; TODO mu4e-dashboard <https://github.com/rougier/mu4e-dashboard>
-(use-package mu4e
+(use-vanilla-package mu4e
   :demand t
   :config
   (setq send-mail-function 'smtpmail-send-it

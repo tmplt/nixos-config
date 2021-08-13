@@ -14,10 +14,6 @@
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
-;; (use-package benchmark-init
-;;   :config
-;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
 (setq use-package-always-defer t)       ; always load features lazily
 
 ;; prevent accidental usage of `list-buffers'

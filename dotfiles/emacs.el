@@ -6,6 +6,14 @@
    'load-path "/etc/nix/pins/mu/share/emacs/site-lisp")
   (package-initialize))
 
+(use-package no-littering
+  :demand t
+  :config
+  (setq backup-directory-alist
+        `((".*" . ,(no-littering-expand-var-file-name "auto-backups"))))
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+
 ;; (use-package benchmark-init
 ;;   :config
 ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
@@ -135,12 +143,6 @@
 (setq pdf-view-midnight-colors (cons "#ffffff" "#000000"))
 
 (setq backward-delete-char-untabify-method 'nil)
-
-;; store all backup and autosave files in the tmp dir
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
 
 ;; CC modes settings
 (setq c-default-style "linux")

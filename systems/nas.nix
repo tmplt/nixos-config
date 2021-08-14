@@ -139,6 +139,12 @@ in
     '';
   };
 
+  services.syncthing = {
+    enable = true;
+    openDefaultPorts = true;
+    dataDir = "/rpool/media/sync";
+  };
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     6600 8000 # MPD

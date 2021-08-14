@@ -436,6 +436,42 @@ in { pkgs, config, lib, ... }: {
 
   # Graphical services
 
+  programs.waybar = {
+    enable = true;
+    settings = [{
+      layer = "top";
+      position = "top";
+      height = 20;
+      output = [ "LVDS-1" "DP-2" ];
+      modules-left = [ "sway/workspaces" "sway/mode" "sway/window" ];
+      modules-center = [ "clock" ];
+      modules-right = [ "custom/unread-email" "battery" "network" ];
+      modules = {
+        "sway/workspaces" = {
+          all-outputs = true;
+          disable-scroll = true;
+        };
+        "battery" = {
+          format = "B: {time} {capacity}%"; # TODO charging state
+        };
+        "network" = {
+          format = "W: {signalStrength}% {essid}";
+        };
+        "clock" = {
+          format = "{:%F %H:%M}";
+        };
+        "custom/unread-email" = {
+          format = "M: {}";
+          max-length = 30;
+          interval = 60;
+          exec = pkgs.writeShellScript "mu-check-unread" ''
+            ${pkgs.mu}/bin/mu find flag:unread 2>/dev/null | wc -l
+          '';
+        };
+      };
+    }];
+  };
+
   wayland.windowManager.sway = {
     enable = true;
     systemdIntegration = true;
@@ -533,6 +569,9 @@ in { pkgs, config, lib, ... }: {
         } // escapes;
       };
 
+      # disable swaybar, waybar is used below instead.
+      bars = [];
+
       startup = [
         {
           command = ''
@@ -544,6 +583,7 @@ in { pkgs, config, lib, ... }: {
           '';
         }
         { command = "emacs"; }
+        { command = "${pkgs.waybar}/bin/waybar"; }
       ];
 
       output = { "*" = { bg = "${../wallpapers/bg.jpg} fill"; }; };

@@ -43,6 +43,7 @@ rec {
   users.groups.builders = { };
   users.users.builder = {
     isNormalUser = false;
+    isSystemUser = true;
     group = "builders";
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [ sshKeys.builder ];
